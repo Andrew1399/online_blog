@@ -1,0 +1,266 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block head_title %}{{ user.username }} | Django Blog{% endblock head_title %}
+
+{% block content %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    {% if request.user %}
+    <section class="section about-section gray-bg" id="about">
+            <div class="container">
+                <div class="row align-items-center flex-row-reverse">
+                    <div class="col-lg-6">
+                        <div class="about-text go-to">
+                            <h3 class="dark-color">{{user.username}} {{profile.last_name}}</h3>
+                            <h6 class="theme-color lead">{{profile.about}}</h6>
+                            <p>{{user.profile.about_me}}</p>
+                            <div class="row about-list">
+                                <div class="col-md-6">
+                                    {% if user.profile.activity %}
+                                        <div class="media">
+                                            <label>Activity</label>
+                                            <p>{{user.profile.activity}}</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="media">
+                                            <label>Activity</label>
+                                            <p>Not specified</p>
+                                        </div>
+                                    {% endif %}
+                                    <div class="media">
+                                        <label>Status</label>
+                                        <p>{% if not user.is_authenticated %}Offline{% else %}Online{% endif %}</p>
+                                    </div>
+                                    {% if user.profile.country %}
+                                        <div class="media">
+                                            <label>Country</label>
+                                            <p>{{user.profile.country}}</p>
+                                        </div>
+                                    {% else %}
+                                        <div class="media">
+                                            <label>Country</label>
+                                            <p>Not specified</p>
+                                        </div>
+                                    {% endif %}
+                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Update profile</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="image-content">
+                                                        <img src="{{ profile.image_url}}" />
+                                                    </div>
+                                                    <div class="description">
+                                                    <div class="">Write some information about you...</div>
+                                                        <form action="" method="POST" class="form" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        {{form.as_p}}
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="media">
+                                        <label>E-mail</label>
+                                        <p>{{user.email}}</p>
+                                    </div>
+<!--                                    <div class="media">-->
+<!--                                        <label>Phone</label>-->
+<!--                                        <p>820-885-3321</p>-->
+<!--                                    </div>-->
+                                    <div class="media">
+                                        <label>Created</label>
+                                        <p>2023</p>
+                                    </div>
+<!--                                    <div class="media">-->
+<!--                                        <label>Freelance</label>-->
+<!--                                        <p>Available</p>-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+                        </div>
+                        {% if user != user.profile %}
+                            {% if following %}
+                                <a class="btn btn-lg btn-danger"
+                                    href="{% url 'users:profile_unfollow' user.username %}" role="button">
+                                    Unfollow
+                                 </a>
+                            {% else %}
+                                <a class="btn btn-lg btn-info"
+                                     href="{% url 'users:profile_follow' user.username %}" role="button">
+                                     Follow
+                                 </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="about-avatar">
+                            {% if user.profile.image %}
+                               <img src="{{ user.profile.image.url}}" alt="Admin" width="350"/>
+                            {% else %}
+                                <img src="{% static 'img/avatar.jpg' %}" alt="{{user.username}}" width="350"/>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="counter">
+                    <div class="row">
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                <h6 class="count h2" data-to="500" data-speed="500">{{ user.followers.count }}</h6>
+                                <p class="m-0px font-w-600">Followers</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                <h6 class="count h2" data-to="150" data-speed="150">{{ user.following.count }}</h6>
+                                <p class="m-0px font-w-600">Following</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                {% if user.profile.count_posts %}
+                                    <h6 class="count h2" data-to="850" data-speed="850">{{user.profile.count_posts}}</h6>
+                                    <p class="m-0px font-w-600">Created posts</p>
+                                {% else %}
+                                    <h6 class="count h2" data-to="850" data-speed="850">0</h6>
+                                    <p class="m-0px font-w-600">Created posts</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                <h6 class="count h2" data-to="190" data-speed="190">{{user.profile.count_comments}}</h6>
+                                <p class="m-0px font-w-600">Created comments</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    {% endif %}
+{% endblock content %}
+
+
+
+<!--<div class="container emp-profile">-->
+<!--  <form method="post">-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-4">-->
+<!--        <div class="profile-img">-->
+<!--          {% if user.profile.image %}-->
+<!--          <img src="{{ profile.image.url }}" alt="{{ user.username }}"  style="width: 200px;">-->
+<!--          {% else %}-->
+<!--          <img class="card-img-top col-sm-3 col-4 my-3" src="{% static 'img/user.jpg' %}" alt="{{ user.username }}">-->
+<!--          {% endif %}-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-md-6">-->
+<!--        <div class="profile-head">-->
+<!--          <h5>-->
+<!--            {{ user.username }}-->
+<!--          </h5>-->
+<!--          <h6>-->
+<!--            {{ user.profile.activity }}-->
+<!--          </h6>-->
+<!--          <p class="proile-rating">Last login on: {{ user.last_login }}</p>-->
+<!--          <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+<!--            <li class="nav-item">-->
+<!--              <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="row">-->
+<!--      <div class="col-md-4">-->
+<!--        <div class="profile-work">-->
+<!--          <p>ABOUT ME</p>-->
+<!--          <p class="card-text"><mark>{{ user.profile.about_me }}</mark></p>-->
+<!--        </div>-->
+<!--        <ul class="list-group list-group-flush">-->
+<!--          <li class="list-group-item">-->
+<!--          <div class="h6 text-muted">-->
+<!--            Followers: {{ user.follower.count }} <br />-->
+<!--            Following: {{ user.following.count }}-->
+<!--          </div>-->
+
+<!--          </li>-->
+<!--          <li class="list-group-item">-->
+<!--            <div class="h6 text-muted">-->
+<!--              {{ user.profile.posts.count }}-->
+<!--            </div>-->
+<!--          </li>-->
+<!--          <li class="list-group-item">-->
+<!--            {% if user != user.profile %}-->
+<!--              {% if following %}-->
+<!--              <a class="btn btn-lg btn-danger"-->
+<!--                 href="{% url 'users:profile_unfollow' user.username %}" role="button">-->
+<!--                 Unfollow-->
+<!--              </a>-->
+<!--              {% endif %}-->
+<!--              {% if not request.user %}-->
+<!--              <a class="btn btn-lg btn-info"-->
+<!--                 href="{% url 'users:profile_follow' user.username %}" role="button">-->
+<!--                Follow-->
+<!--              </a>-->
+<!--              {% endif %}-->
+<!--            {% endif %}-->
+<!--          </li>-->
+<!--      </div>-->
+<!--      <div class="col-md-8">-->
+<!--        <div class="tab-content profile-tab" id="myTabContent">-->
+<!--          <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <label>Username</label>-->
+<!--              </div>-->
+<!--              <div class="col-md-6">-->
+<!--                <p>{{ user.username }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <label>Email</label>-->
+<!--              </div>-->
+<!--              <div class="col-md-6">-->
+<!--                <p>{{ user.email }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <label>Country</label>-->
+<!--              </div>-->
+<!--              <div class="col-md-6">-->
+<!--                <p>{{ user.profile.country }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="row">-->
+<!--              <div class="col-md-6">-->
+<!--                <label>Activity</label>-->
+<!--              </div>-->
+<!--              <div class="col-md-6">-->
+<!--                <p>{{ user.profile.activity }}</p>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </form>-->
+<!--</div>-->

@@ -1,0 +1,43 @@
+{% extends "users/base.html" %}
+
+{% block page_header %}
+<div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Hello! <i class="fas fa-globe-americas"></i></h1>
+            <p class="lead">Make your own Blog or read other authors' posts, whatever. You can
+                choose your favorite post, you can leave comments and put likes or dislikes.
+                </p>
+            <hr class="my-4">
+            <p>To see all the opportunities of this web application sign up right now!</p>
+            <a class="btn btn-info btn-lg" href="{% url 'users:register' %}" role="button">Sign up &raquo;</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <img src="https://1ccl.ru/upload/images/Frame%20870.jpg" width="400" height="300" class="card-img-top" alt=""/>
+                    <div class="card-body">
+                        <h5 class="card-title">Reader</h5>
+                        <p class="card-text">Read other author's posts, put likes or dislikes, follow your favorite authors!
+                            </p>
+                        <a href="{% url 'users:register' %}" class="btn btn-info">Sigh up here &raquo;</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                     <img src="https://www.copypress.com/wp-content/uploads/2021/09/iStock-959853052.jpg" width="400" height="300" class="card-img-top" alt=""/>
+                    <div class="card-body">
+                        <h5 class="card-title">Author</h5>
+                        <p class="card-text">Create your own posts, customize posts to your liking, follow other authors
+                            and become popular!</p>
+                        <a href="{% url 'users:register_writer' %}" class="btn btn-info">Sign up here &raquo;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock page_header %}

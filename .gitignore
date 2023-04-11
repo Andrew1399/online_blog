@@ -1,0 +1,10 @@
+__pycache__/
+
+.idea
+potsts/migrations
+users/migrations
+images
+.env
+venv
+main.py
+db.sqlite3

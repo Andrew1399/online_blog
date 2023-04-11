@@ -1,0 +1,70 @@
+{% extends 'users/base.html' %}
+
+{% block head_title %}Edit profile{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <h2 class="my-5">Edit profile</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          {{ form.username.label_tag }}
+          <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="id_username"
+            name="username" value='{{ form.username.value|default:user.username }}'>
+          {% if form.username.errors %}
+          <div class="invalid-feedback">{{ form.username.errors }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.email.label_tag }}
+          <input type="text" class="form-control {% if form.email.errors %}is-invalid{% endif %}" id="id_email"
+            name="email" >
+          {% if form.activity.errors %}
+          <div class="invalid-feedback">{{ form.email.errors }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.activity.label_tag }}
+          <input type="text" class="form-control {% if form.activity.errors %}is-invalid{% endif %}" id="id_activity"
+            name="activity">
+          {% if form.activity.errors %}
+          <div class="invalid-feedback">{{ form.activity.errors }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.country.label_tag }}
+          <input type="text" class="form-control {% if form.country.errors %}is-invalid{% endif %}" id="id_country"
+            name="country" >
+          {% if form.activity.errors %}
+          <div class="invalid-feedback">{{ form.country.errors }}</div>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          {{ form.about_me.label_tag }}
+          <textarea type="text" class="form-control {% if form.about_me.errors %}is-invalid{% endif %}" id="id_about_me"
+            name="about_me" value='{{ form.about_me.value }}' rows="5"></textarea>
+          {% if form.about_me.errors %}
+          <div class="invalid-feedback">{{ form.about_me.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          {{ form.image.label_tag }}<br>
+          <input type="file" class="{% if form.image.errors %}is-invalid{% endif %}" id="id_image" name="image"
+            accept="image/*">
+          {% if form.image.errors %}
+          <div class="invalid-feedback">{{ form.image.errors }}</div>
+          {% endif %}
+          <div>
+            <p> Wanna change password? <a href="{% url 'users:password_change' %}">Change password</a></p>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <br>
+    </div>
+  </div>
+</div>
+{% endblock content %}

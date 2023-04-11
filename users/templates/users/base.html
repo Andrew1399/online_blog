@@ -1,0 +1,107 @@
+{% load bootstrap4 %}
+
+{% load static %}
+
+<!doctype html>
+<html lang="end">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+       shrink-to-fit=no">
+    <title>Django Blog</title>
+
+    <link href="{% static 'fonts/fontawesome-all.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Open+Sans|Playfair+Display" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/post.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/profile.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/signup.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
+</head>
+<body>
+  <nav class="navbar navbar-expand-md navbar-light bg-light o mb-4 border">
+    <a class="navbar-brand" href="{% url 'users:index' %}"> Django Blog <i class="fab fa-blogger-b"></i></a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarCollapse" aria-controls="navbarCollapse"
+        aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+
+        {% if request.user.is_authenticated %}
+        <div class="navbar-nav ml-auto">
+          <a href="{% url 'users:profile' request.user.username %}"
+            class="nav-item nav-link {% if request.user.username in request.path %}active{% endif %}">
+            Profile <i class="fas fa-id-badge"></i>
+          </a>
+            <a href="{% url 'users:edit_profile' %}" class="nav-item nav-link">Edit profile <i class="fas fa-edit"></i></a>
+          <a href="{% url 'posts:post_create' %}"
+            class="nav-item nav-link {% if request.path == '/post/create/' %}active{% endif %}">
+            Create a post <i class="fas fa-plus"></i>
+          </a>
+        </div>
+        {% endif %}
+        <ul class="navbar-nav ml-auto">
+          {% if not user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'users:register' %}">Sign up <i class="fas fa-user-plus"></i></a>
+            </li>
+          {% endif %}
+          {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'posts:post_page' %}">Posts <i class="fas fa-bars"></i></a>
+          </li>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+
+          </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout">Logout <i class="fas fa-sign-out-alt"></i></a>
+          </li>
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="#">Welcome, {{request.user.username}}! <i class="fas fa-door-open"></i></a>-->
+<!--          </li>-->
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'users:login' %}"> Log in <i class="fas fa-sign-in-alt"></i></a>
+          </li>
+          {% endif %}
+        </ul>
+        </li>
+        </ul>
+        {% if user.is_authenticated %}
+        <form action="{% url 'posts:search' %}" method="get">
+          <input class="form-control mr-0" name="q" type="search" placeholder="Search" aria-label="Search">
+        </form>
+        {% endif %}
+    </div>
+
+  </nav>
+
+  <main role="main" class="container">
+      {% block page_header %}{% endblock page_header %}
+
+    <div>
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      {% block content %}{% endblock content %}
+    </div>
+  </main>
+</body>
+
+</html>
